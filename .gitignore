@@ -1,0 +1,14 @@
+# Object files
+*.o
+
+# Executables
+*.x
+
+# Backup files
+*~
+
+# Assembly files
+*.s
+
+# Virtual environment
+venv/
