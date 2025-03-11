@@ -2,7 +2,6 @@
 
 mkdir -p ./lab
 touch big-red-button.sh
-touch ./lab/run-all-tests.sh
 mkdir ./lab/docs/
 mkdir ./lab/utils/ # any additional tooling and code that provide support
 mkdir ./lab/objectives/
