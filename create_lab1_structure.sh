@@ -6,7 +6,7 @@ touch ./lab/run-all-tests.sh
 mkdir ./lab/docs/
 mkdir ./lab/utils/ # any additional tooling and code that provide support
 mkdir ./lab/objectives/
-touch ./lab/objectives/{run-all-objective-tests.sh,run-all-verify.sh,run-all-measure.sh,run-clean-all.sh} # scripts to run/clean/bench everything
+touch ./lab/objectives/{run-all-verify.sh,run-all-measure.sh,run-clean-all.sh} # scripts to run/clean/bench everything
 
 declare -A task_counts=(
     ["a"]=5    # Objective A has 5 tasks (00-04)
