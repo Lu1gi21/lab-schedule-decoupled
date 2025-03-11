@@ -68,8 +68,29 @@ void COMPUTE_NAME( int m0,
 	    for( int r0 = 0; r0 < (R); ++r0 )
 	      {
           BEGIN_INSTRUMENTATION; // loop:r0
-          y[i0*n0+j0_o+j0_i]  += weights[q0*(R)+r0] *
-            x[ ((q0+i0)%m0)*n0 + ((r0+j0_o+j0_i)%n0)  ];
+
+          int   w_qr_offset = q0*(R);
+          int   w_qr_idx    = w_qr_offset + r0;
+          float *w_qr_addr  = &weights[w_qr_idx]; // &weights + w_qr_idx
+          float w_qr        = *w_qr_addr;                   // read weight at (q,r)
+      
+          int    iq_shift    = q0+i0;
+          int    iq_row_wrap = iq_shift % m0;
+          int    jr_shift    = r0+j0_o+j0_i;
+          int    jr_col_wrap = jr_shift % n0;
+          int    iq_offset   = iq_row_wrap * n0;
+          int    x_iqjr_idx  = iq_offset + jr_col_wrap;
+          float *x_iqjr_addr = &x[x_iqjr_idx];
+          float  x_iqjr      = *x_iqjr_addr; // read x at ((i+q),(j+r))
+      
+          int    y_ij_offset = i0*n0;
+          int    y_ij_idx    = y_ij_offset+j0_o+j0_i;
+          float *y_ij_addr   = &y[y_ij_idx];
+          
+          float y_ij      = *y_ij_addr;                          // read y at (i,j)
+          float res_wx    = w_qr * x_iqjr;                        // multiply x by the weight
+          float acc_y_ij  = y_ij + res_wx;                        // accumulate the result
+          *y_ij_addr      = acc_y_ij;                             // write the result back
           END_INSTRUMENTATION; // loop:r0
 	      }
 	    // END_INSTRUMENTATION; // loop:q0
