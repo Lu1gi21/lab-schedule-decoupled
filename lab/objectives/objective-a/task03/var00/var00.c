@@ -148,16 +148,16 @@ void COMPUTE_NAME( int m0,
 {
 
   // BEGIN_INSTRUMENTATION; // func:compute_name
-  for( int i0 = 0; i0 < m0; ++i0 )
+  for( int j0 = 0; j0 < n0; ++j0 )
+  {
+    // BEGIN_INSTRUMENTATION; // loop:j0
+    for( int i0 = 0; i0 < m0; ++i0 )
     {
       // BEGIN_INSTRUMENTATION; // loop:i0
-      for( int j0 = 0; j0 < n0; ++j0 )
-	{
-	  // BEGIN_INSTRUMENTATION; // loop:j0
-	  for( int q0 = 0; q0 < (Q); ++q0 )
-	  {
-	    // BEGIN_INSTRUMENTATION; // loop:q0
-	    for( int r0 = 0; r0 < (R); ++r0 )
+	    for( int q0 = 0; q0 < (Q); ++q0 )
+	    {
+	      // BEGIN_INSTRUMENTATION; // loop:q0
+	      for( int r0 = 0; r0 < (R); ++r0 )
 	      {
 		BEGIN_INSTRUMENTATION; // loop:r0
 		
@@ -172,9 +172,9 @@ void COMPUTE_NAME( int m0,
 	      }
 	    // END_INSTRUMENTATION; // loop:q0
 	  }
-	  // END_INSTRUMENTATION; // loop:j0
+	  // END_INSTRUMENTATION; // loop:i0
 	}
-      // END_INSTRUMENTATION; // loop:r0
+      // END_INSTRUMENTATION; // loop:j0
     }
   // END_INSTRUMENTATION; // func:compute_name
   
