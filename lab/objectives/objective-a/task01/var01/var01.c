@@ -1,8 +1,7 @@
 /*
 This variant will
 
-                     UNROLL r
-from basic/baseline.c
+                     UNROLL conv_4x3_ijqr.txt
 
 */
 
@@ -165,16 +164,99 @@ void COMPUTE_NAME( int m0,
 	  {
 	    // BEGIN_INSTRUMENTATION; // loop:q0
 
-		BEGIN_INSTRUMENTATION; // loop:r0
-		y[i0*n0+j0]  += weights[q0*(R)+ 0] * x[ ((q0+i0)%m0)*n0 + ((0+j0)%n0)  ];    //r0
-               
-              y[i0*n0+j0]  += weights[q0*(R)+ 1] * x[ ((q0+i0)%m0)*n0 + ((1+j0)%n0)  ];    //r1
+      BEGIN_INSTRUMENTATION; // loop:r0
+      {
+          int   w_qr_offset = q0*(R);
+          int   w_qr_idx    = w_qr_offset + 0;
+          float *w_qr_addr  = &weights[w_qr_idx];
+          float w_qr        = *w_qr_addr;
+  
+          int    iq_shift    = q0 + i0;
+          int    iq_row_wrap = iq_shift % m0;
+          int    jr_shift    = 0 + j0;
+          int    jr_col_wrap = jr_shift % n0;
+          int    iq_offset   = iq_row_wrap * n0;         // r0=0
+          int    x_iqjr_idx  = iq_offset + jr_col_wrap;
+          float *x_iqjr_addr = &x[x_iqjr_idx];
+          float  x_iqjr      = *x_iqjr_addr;
+  
+          int    y_ij_offset = i0*n0 + j0;
+          float *y_ij_addr   = &y[y_ij_offset];
+          float y_ij         = *y_ij_addr;
+          float res_wx       = w_qr * x_iqjr;
+          float acc_y_ij     = y_ij + res_wx;
+          *y_ij_addr         = acc_y_ij;
+      }
 
-              y[i0*n0+j0]  += weights[q0*(R)+ 2] * x[ ((q0+i0)%m0)*n0 + ((2+j0)%n0)  ];    //r2
+      {
+          int   w_qr_offset = q0*(R);
+          int   w_qr_idx    = w_qr_offset + 1;
+          float *w_qr_addr  = &weights[w_qr_idx];
+          float w_qr        = *w_qr_addr;
+  
+          int    iq_shift    = q0 + i0;
+          int    iq_row_wrap = iq_shift % m0;
+          int    jr_shift    = 1 + j0;
+          int    jr_col_wrap = jr_shift % n0;
+          int    iq_offset   = iq_row_wrap * n0;         // r0=1
+          int    x_iqjr_idx  = iq_offset + jr_col_wrap;
+          float *x_iqjr_addr = &x[x_iqjr_idx];
+          float  x_iqjr      = *x_iqjr_addr;
+  
+          int    y_ij_offset = i0*n0 + j0;
+          float *y_ij_addr   = &y[y_ij_offset];
+          float y_ij         = *y_ij_addr;
+          float res_wx       = w_qr * x_iqjr;
+          float acc_y_ij     = y_ij + res_wx;
+          *y_ij_addr         = acc_y_ij;
+      }
 
-              y[i0*n0+j0]  += weights[q0*(R)+ 3] * x[ ((q0+i0)%m0)*n0 + ((3+j0)%n0)  ];    //r3
+      {
+          int   w_qr_offset = q0*(R);
+          int   w_qr_idx    = w_qr_offset + 2;
+          float *w_qr_addr  = &weights[w_qr_idx];
+          float w_qr        = *w_qr_addr;
+  
+          int    iq_shift    = q0 + i0;
+          int    iq_row_wrap = iq_shift % m0;
+          int    jr_shift    = 2 + j0;
+          int    jr_col_wrap = jr_shift % n0;
+          int    iq_offset   = iq_row_wrap * n0;         // r0=2
+          int    x_iqjr_idx  = iq_offset + jr_col_wrap;
+          float *x_iqjr_addr = &x[x_iqjr_idx];
+          float  x_iqjr      = *x_iqjr_addr;
+  
+          int    y_ij_offset = i0*n0 + j0;
+          float *y_ij_addr   = &y[y_ij_offset];
+          float y_ij         = *y_ij_addr;
+          float res_wx       = w_qr * x_iqjr;
+          float acc_y_ij     = y_ij + res_wx;
+          *y_ij_addr         = acc_y_ij;
+      }
 
-		END_INSTRUMENTATION; // loop:r0
+      {
+          int   w_qr_offset = q0*(R);
+          int   w_qr_idx    = w_qr_offset + 3;
+          float *w_qr_addr  = &weights[w_qr_idx];
+          float w_qr        = *w_qr_addr;
+  
+          int    iq_shift    = q0 + i0;
+          int    iq_row_wrap = iq_shift % m0;
+          int    jr_shift    = 3 + j0;
+          int    jr_col_wrap = jr_shift % n0;
+          int    iq_offset   = iq_row_wrap * n0;         // r0=3
+          int    x_iqjr_idx  = iq_offset + jr_col_wrap;
+          float *x_iqjr_addr = &x[x_iqjr_idx];
+          float  x_iqjr      = *x_iqjr_addr;
+  
+          int    y_ij_offset = i0*n0 + j0;
+          float *y_ij_addr   = &y[y_ij_offset];
+          float y_ij         = *y_ij_addr;
+          float res_wx       = w_qr * x_iqjr;
+          float acc_y_ij     = y_ij + res_wx;
+          *y_ij_addr         = acc_y_ij;
+      }
+      END_INSTRUMENTATION; // loop:r0
 
 	    // END_INSTRUMENTATION; // loop:q0
 	  }

@@ -1,8 +1,7 @@
 /*
 This variant will
 
-                     UNROLL q
-from basic/baseline.c
+                     UNROLL conv_4x3_qrij
 
 */
 
@@ -148,62 +147,57 @@ Indices to Addresses
 
 
 void COMPUTE_NAME( int m0,
-		   int n0,
-		   float *x,
-		   float *y )
-
+           int n0,
+           float *x,
+           float *y )
 {
-
-  // BEGIN_INSTRUMENTATION; // func:compute_name
-  for( int i0 = 0; i0 < m0; ++i0 )
-    {
-      // BEGIN_INSTRUMENTATION; // loop:i0
-      for( int j0 = 0; j0 < n0; ++j0 )
-	{
-
-
-
-	    // BEGIN_INSTRUMENTATION; // loop:q0
-	    for( int r0 = 0; r0 < (R); ++r0 ){
-	      {//q= 1
-		BEGIN_INSTRUMENTATION; // loop:r0
-		y[i0*n0+j0]  += weights[0*(R)+r0] *
-		  x[ ((0+i0)%m0)*n0 + ((r0+j0)%n0)  ];
-		END_INSTRUMENTATION; // loop:r0
-	      }
-
-
-             {//q= 1
-		BEGIN_INSTRUMENTATION; // loop:r0
-		y[i0*n0+j0]  += weights[1*(R)+r0] *
-		  x[ ((1+i0)%m0)*n0 + ((r0+j0)%n0)  ];
-		END_INSTRUMENTATION; // loop:r0
-	      }
-
-
-             {//q= 2
-		BEGIN_INSTRUMENTATION; // loop:r0
-		y[i0*n0+j0]  += weights[2*(R)+r0] *
-		  x[ ((2+i0)%m0)*n0 + ((r0+j0)%n0)  ];
-		END_INSTRUMENTATION; // loop:r0
-	      }
-
-
-             {//q= 3
-		BEGIN_INSTRUMENTATION; // loop:r0
-		y[i0*n0+j0]  += weights[3*(R)+r0] *
-		  x[ ((3+i0)%m0)*n0 + ((r0+j0)%n0)  ];
-		END_INSTRUMENTATION; // loop:r0
-	      }
-       }
-
-
-
-	  // END_INSTRUMENTATION; // loop:j0
-	}
-      // END_INSTRUMENTATION; // loop:i0
+  for( int i0 = 0; i0 < m0; ++i0 ) {
+    for( int j0 = 0; j0 < n0; ++j0 ) {
+      // Unrolled q loop (q=0,1,2)
+      for( int r0 = 0; r0 < R; ++r0 ) {
+        // q=0
+        BEGIN_INSTRUMENTATION;
+        int w_qr_idx = 0 * R + r0;
+        float w_qr = weights[w_qr_idx];
+        
+        int iq = (0 + i0) % m0;
+        int jr = (r0 + j0) % n0;
+        float x_iqjr = x[iq * n0 + jr];
+        
+        float *y_ij = &y[i0 * n0 + j0];
+        *y_ij += w_qr * x_iqjr;
+        END_INSTRUMENTATION;
+      }
+      
+      for( int r0 = 0; r0 < R; ++r0 ) {
+        // q=1
+        BEGIN_INSTRUMENTATION;
+        int w_qr_idx = 1 * R + r0;
+        float w_qr = weights[w_qr_idx];
+        
+        int iq = (1 + i0) % m0;
+        int jr = (r0 + j0) % n0;
+        float x_iqjr = x[iq * n0 + jr];
+        
+        float *y_ij = &y[i0 * n0 + j0];
+        *y_ij += w_qr * x_iqjr;
+        END_INSTRUMENTATION;
+      }
+      
+      for( int r0 = 0; r0 < R; ++r0 ) {
+        // q=2
+        BEGIN_INSTRUMENTATION;
+        int w_qr_idx = 2 * R + r0;
+        float w_qr = weights[w_qr_idx];
+        
+        int iq = (2 + i0) % m0;
+        int jr = (r0 + j0) % n0;
+        float x_iqjr = x[iq * n0 + jr];
+        
+        float *y_ij = &y[i0 * n0 + j0];
+        *y_ij += w_qr * x_iqjr;
+        END_INSTRUMENTATION;
+      }
     }
-  // END_INSTRUMENTATION; // func:compute_name
-  
-
+  }
 }
