@@ -1,10 +1,10 @@
 #! /bin/bash
 #
-# Top level script to run verification in this directory.
+# Top level script to run verification and benchmarking in this directory.
 # Note that the "-C" flag specifies the directory of the make file.
 
-# NOTE: Adjust FILE_REF and FILE_TST to fit your task's needs.
-#make -C ../.. measure-all FILE_REF=./examples/basic/baseline.c FILE_TST=./examples/basic/baseline.c
-make -C ../.. measure-all FILE_REF=./examples/basic/baseline.c FILE_TST=./examples/basic/test_var000.c
+# Run measurement for var00
+make -C var00 measure-all
 
-# NOTE: For every variant in the task (or test) make sure to run it in here if it is relevant.
+# NOTE: Add more lines below if you have additional variants (e.g., var01, var02, etc.)
+# make -C var01 measure-all

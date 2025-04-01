@@ -4,7 +4,7 @@
 # Note that the "-C" flag specifies the directory of the make file.
 
 # Hardcoded file name to verify in this variant
-FILE_TST=ssa-conv_4x3_ijqr_var03.c
+FILE_TST=ssa-blur_2x2_ijqr_var00.c
 FILE_REF=../ssa-versions/ssa_baseline.c
 
 make -C ../.. measure-verifier FILE_REF="$FILE_REF" FILE_TST="$FILE_TST"
