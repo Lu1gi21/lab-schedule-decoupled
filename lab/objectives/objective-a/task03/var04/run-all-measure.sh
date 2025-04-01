@@ -8,3 +8,4 @@
 make -C ../.. measure-all FILE_REF=./examples/basic/baseline.c FILE_TST=./examples/basic/test_var000.c
 
 # NOTE: For every variant in the task (or test) make sure to run it in here if it is relevant.
+    
