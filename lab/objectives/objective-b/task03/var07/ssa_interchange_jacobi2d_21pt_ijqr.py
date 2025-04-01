@@ -73,7 +73,7 @@ float weights[] = {-1.1, -1.1,  1.2, -2.1, -1.1, -2.1, -1.2,  2.2, -2.1,  0.1,  
 	  }
 	  // END_INSTRUMENTATION; // loop:j0
 	}
-      // END_INSTRUMENTATION; // loop:r0
+      // END_INSTRUMENTATION; // loop:i0
     }
   // END_INSTRUMENTATION; // func:compute_name
   
