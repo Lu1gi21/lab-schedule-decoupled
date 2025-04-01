@@ -72,6 +72,12 @@ loop_r = """
         // BEGIN_INSTRUMENTATION; // loop:r0
 """
 
+split_loop = """
+    for( int $ = 0; $ < !; $ += #)
+    for( int % = 0; % < #; %++){
+        // BEGIN_INSTRUMENTATION;
+"""
+
 computations = """
             int   w_qr_offset = q0*(R);
             int   w_qr_idx    = w_qr_offset + r0;
@@ -124,8 +130,20 @@ class Generator:
     loop_order = None
 
     def __init__(self, schedule_path, operation_path):
+        global loop_i, loop_j, loop_q, loop_r
+
         self.read_schedule(schedule_path)
         self.read_operation(operation_path)
+
+        match self.split_var:
+                case "i0":
+                    loop_i = self.split("m0")
+                case "j0":
+                    loop_j = self.split("n0")
+                case "q0":
+                    loop_q = self.split("Q")
+                case "r0":
+                    loop_r = self.split("R")
         
     def read_schedule(self, path):
         schedule_file = open(path, 'r')
@@ -145,6 +163,19 @@ class Generator:
         self.loop_order = [s for s in operation_file.readline().strip().split(" ") if s]
 
         operation_file.close()
+
+    def split(self, delimiter):
+        global split_loop, computations
+        combine_var = "(" + self.var0 + "+" + self.var1 + ")"
+
+        split_loop = split_loop.replace("$", self.var0)
+        split_loop = split_loop.replace("%", self.var1)
+        split_loop = split_loop.replace("#", self.factor)
+        split_loop = split_loop.replace("!", delimiter)
+
+        computations = computations.replace(self.split_var, combine_var)
+
+        return split_loop
 
     def insert_Q_R(self):
         global sec_one
@@ -192,7 +223,7 @@ class Generator:
 
 
 def main():
-    generator = Generator("split_i_io_ii_4.schedule", "conv_4x3_ijqr.operation")
+    generator = Generator("split_j_jo_ji_8.schedule", "conv_4x3_ijqr.operation")
     generator.generate("var00.c")
 
 if __name__ == '__main__':
