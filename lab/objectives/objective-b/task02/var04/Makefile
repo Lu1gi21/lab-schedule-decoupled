@@ -13,7 +13,7 @@
 # make all FILE_TST=test_varXXX.c  FILE_REF=baseline.c CFLAGS="-O3"
 
 # This line may need to be updated to match your file in case I missed it...
-FILE_TST?=ssa_unroll_r0.c
+FILE_TST?=ssa_split_j_jo_ji_16.c
 FILE_REF?=../ssa-versions/ssa_baseline.c # This line should pretty much stay the same across objectives
 
 
