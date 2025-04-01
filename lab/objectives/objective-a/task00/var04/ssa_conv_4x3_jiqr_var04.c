@@ -20,9 +20,9 @@ static const int Q = 4;
 
 // weights[(Q)*(R)] in row-major order
 static float weights[] = {
-    -1.1 -1.1  1.2 -2.1
-    -1.1 -2.1 -1.2  2.2
-    -2.1  0.1  0.2  1.2
+    -1.1, -1.1,  1.2, -2.1,
+    -1.1, -2.1, -1.2,  2.2,
+    -2.1,  0.1,  0.2,  1.2
 };
 
 double COMPUTE_FLOP_NAME(int m0, int n0) {
