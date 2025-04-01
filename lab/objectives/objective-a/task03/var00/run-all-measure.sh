@@ -1,5 +1,6 @@
 #! /bin/bash
 #
+
 # Top level script to run verification and benchmarking in this directory.
 # Note that the "-C" flag specifies the directory of the make file.
 
