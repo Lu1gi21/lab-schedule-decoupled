@@ -123,7 +123,7 @@ def main():
       operation_name = sys.argv[2]
       
       # open (& close) operation file and format input
-      f = open(operation_name, "r")
+      f = open(f"../operations/{operation_name}", "r")
       operation_lines = f.readlines()
       operation_matrix = [line.split(" ") for line in operation_lines]
       f.close()
@@ -152,7 +152,7 @@ def main():
       schedule_name  = sys.argv[3]
       
       # open (& close) schedule file and format input
-      f = open(schedule_name, "r")
+      f = open(f"../interchanges/{schedule_name}", "r")
       schedule_lines = f.readlines()
       schedule_matrix = [line.split(" ") for line in schedule_lines]
       f.close()
