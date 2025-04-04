@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for variant in ./lab/objectives/objective-$1/task$2/var*; do
-    echo "Running: cleaning $(basename $variant)..."
-    bash $variant/run-clean-all.sh
+for task in task*/; do
+    echo "Running: cleaning $(basename $task)..."
+    bash $task/run-clean-all.sh
 done
 
-echo "All variants cleaned for task $2 of objective $1."
+echo "All tasks successfully cleaned for objective-$1."

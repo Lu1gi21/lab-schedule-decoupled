@@ -1,8 +1,9 @@
 #!/bin/bash
 
-for variant in ./lab/objectives/objective-$1/task$2/var*; do
+for variant in var*/; do
     echo "Running: verifying $(basename $variant)..."
-    bash $variant/run-all-verify.sh
+    # bash $variant/run-all-verify.sh
+    make -C "$variant" measure-verifier
 done
 
 echo "All variants verified for task $2 of objective $1."
