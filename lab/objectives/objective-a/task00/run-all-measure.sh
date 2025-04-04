@@ -15,5 +15,3 @@ for variant in var*/; do
         make -C "$variant" measure-performance
     fi
 done
-
-echo "All variants measured for task $2 of objective $1."

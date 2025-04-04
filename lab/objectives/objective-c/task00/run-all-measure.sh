@@ -1,8 +1,17 @@
 #!/bin/bash
 
-for task in task*/; do 
-    echo "Running: measuring $(basename $task)..."
-    bash $task/run-all-measure.sh
-done
+FULL=false
+if [[ "$1" == "--full" ]]; then
+    FULL=true
+fi
 
-echo "All tasks successfully measured for objective-$1."
+for variant in var*/; do
+    echo "Running: measuring $(basename "$variant")..."
+
+    if $FULL; then
+        make -C "$variant" measure-all
+    else
+        make -C "$variant" measure-verifier
+        make -C "$variant" measure-performance
+    fi
+done

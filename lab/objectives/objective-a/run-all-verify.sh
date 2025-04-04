@@ -5,4 +5,3 @@ for task in task*/; do
     bash $task/run-all-verify.sh
 done
 
-echo "All tasks successfully verified for objective-$1."

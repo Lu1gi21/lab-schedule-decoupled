@@ -1,8 +1,6 @@
 #!/bin/bash
 
-for task in task*/; do
-    echo "Running: cleaning $(basename $task)..."
-    bash $task/run-clean-all.sh
+for variant in var*/; do
+    echo "Running: cleaning $(basename $variant)..."
+    make -C "$variant" clean-all
 done
-
-echo "All tasks successfully cleaned for objective-$1."

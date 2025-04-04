@@ -5,4 +5,3 @@ for task in task*/; do
     bash $task/run-all-measure.sh
 done
 
-echo "All tasks successfully measured for objective-$1."
