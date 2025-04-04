@@ -14,8 +14,8 @@
 
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_conv4x3_ijqr_unrollvar01_ijqr.c
-FILE_REF?=../task00/ssa-versions/ssa_<version>_baseline.c # Update this line accordingly
-
+# Update the line below accordingly
+FILE_REF?=../task00/ssa-versions/ssa_<version>_baseline.c
 
 
 OSACA_DOT_FILE_TST="$(FILE_TST).osaca.dot"

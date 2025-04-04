@@ -13,7 +13,7 @@
 # make all FILE_TST=test_varXXX.c  FILE_REF=baseline.c CFLAGS="-O3"
 
 # This line may need to be updated to match your file in case I missed it...
-FILE_TST?=ssa_split_q_qo_qi_3.c
+FILE_TST?=ssa_interchange_jacobi2d_5pt_ijqr
 # Update the line below accordingly
 FILE_REF?=../../objective-a/task00/ssa-versions/ssa_<version>_baseline.c
 

@@ -13,9 +13,9 @@
 # make all FILE_TST=test_varXXX.c  FILE_REF=baseline.c CFLAGS="-O3"
 
 # This line may need to be updated to match your file in case I missed it...
-FILE_TST?=ssa-interchange-conv_4x3_ijqr_interchangevar00_ji.c 
-FILE_REF?=../task00/ssa-versions/ssa_<version>_baseline.c # Update this line accordingly
-
+FILE_TST?=ssa-interchange-conv_4x3_ijqr_interchangevar00_ji.c
+# Update the line below accordingly
+FILE_REF?=../task00/ssa-versions/ssa_<version>_baseline.c
 
 
 OSACA_DOT_FILE_TST="$(FILE_TST).osaca.dot"
