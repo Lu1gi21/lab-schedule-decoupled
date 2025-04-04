@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 #define ERROR_THRESHOLD 1e-3
@@ -181,7 +182,8 @@ int main( int argc, char *argv[] )
 	     argv[0]);
       exit(1);
     }
-
+  
+  bool wrote_header = false;
 
   // step through all of the problem sizes of interest
   for( int p = min_size;
@@ -232,10 +234,14 @@ int main( int argc, char *argv[] )
 			output_tst );
 
 
-
       // compute the error
       float res = compute_pair_wise_diff(output_sz,1,1,1, output_ref, output_tst, output_diffs);
       long counts = count_num_errors(output_sz,1,1,1, output_diffs);
+
+      if (!wrote_header) {
+          fprintf(result_file, "m,n,error,status\n");
+          wrote_header = true;
+      }
 
       fprintf(result_file, "%i, %li, %f, ",
 	      m0, counts, res);

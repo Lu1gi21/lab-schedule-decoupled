@@ -15,44 +15,42 @@
 # This will create a png of all of the performance results.
 
 
-import sys
+#!/usr/bin/env python3
 
+import sys
 import pandas as pd
 from matplotlib import pyplot as plt
 
-file_names  = sys.argv[2:]
-output_file = sys.argv[1]
+# Usage: ./plotter.py output.png file1.csv [file2.csv ...] [--peak=X]
+file_names  = []
+output_file = None
+machine_gflop_peak = 3.0  # default fallback
 
-# See: https://aiichironakano.github.io/cs596/PeakFlops.pdf
-# https://www.cpu-world.com/CPUs/Xeon/Intel-Xeon%20E3-1240%20v5.html
-#
-# microarchitecture diagrams for skylake
-# https://www.cpu-world.com/CPUs/Xeon/Intel-Xeon%20E3-1240%20v5.html
-# https://chipsandcheese.com/p/skylake-intels-longest-serving-architecture
+# Parse command-line arguments
+for arg in sys.argv[1:]:
+    if arg.startswith("--peak="):
+        try:
+            machine_gflop_peak = float(arg.split("=", 1)[1])
+        except ValueError:
+            print("Warning: Invalid --peak value, using default")
+    elif output_file is None:
+        output_file = arg
+    else:
+        file_names.append(arg)
 
-# All of these should really be getopts
-number_of_cores=1 # we can look at the one core performance if we are not using multiple threads
-ghz_freq_of_core=2.2
-num_fma_per_core=2  # You need to look at the microarchitecture and pull out a block diagram
-width_fma=8         # AVX2 for floats is 8-floats wide
+if not output_file or not file_names:
+    print("Usage: ./plotter.py output.png file1.csv [file2.csv ...] [--peak=X]")
+    sys.exit(1)
 
-flop_per_cycle=2*width_fma # fma is 2 flops for multiply and add
-machine_gflop_peak = number_of_cores*ghz_freq_of_core*flop_per_cycle
-
-
-
+# Plotting logic
 for fn in file_names:
     df = pd.read_csv(fn)
-    plt.plot(df['size'], df['throughput'])
-plt.legend(file_names, loc="upper right")
-plt.ylim(0, machine_gflop_peak)
-plt.xlim(0,None)
+    plt.plot(df['size'], df['throughput'], label=fn)
 
-# Feel free to edit these or make them arguments
+plt.legend(loc="upper right")
+plt.ylim(0, machine_gflop_peak)
+plt.xlim(0, None)
 plt.title("Performance Versus Problem Size")
 plt.xlabel("Problem Size")
 plt.ylabel("Performance (GFLOP/s)")
-
-#plt.show()
 plt.savefig(output_file)
-
