@@ -14,7 +14,7 @@
 
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_blur_2x2_ijqr_var00.c
-FILE_REF?=ssa_blur_2x2_baseline.c 
+FILE_REF?=../ssa-versions/ssa_blur_2x2_baseline.c 
 
 
 
@@ -207,6 +207,7 @@ get-system-info:
 	@echo ""
 	@lscpu | grep -i "Model name:" | cut -d':' -f2- -
 
+clean-all: clean clean-results
 
 clean-results:
 	rm -f $(MCA_FILE_TST) $(MCA_ASM_FILE_TST) $(OSACA_FILE_TST) $(OSACA_ASM_FILE_TST) $(OBJDUMP_ANNOTATED_FILE_TST) $(OBJDUMP_FILE_TST) $(OBJ_FILE_TST) $(OBJ_FILE_REF) $(CACHEGRIND_FILE_TST) $(CSV_FILE_TST) $(RES_CSV_FILE_TST) $(PNG_FILE_TST) $(OBJ_FILE_DBG_TST) $(OSACA_DOT_FILE_TST)

@@ -24,7 +24,7 @@ from matplotlib import pyplot as plt
 # Usage: ./plotter.py output.png file1.csv [file2.csv ...] [--peak=X]
 file_names  = []
 output_file = None
-machine_gflop_peak = 8.0  # default fallback
+machine_gflop_peak = 3.0  # default fallback
 
 # Parse command-line arguments
 for arg in sys.argv[1:]:
