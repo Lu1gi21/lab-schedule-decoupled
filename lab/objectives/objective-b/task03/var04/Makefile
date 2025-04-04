@@ -14,8 +14,8 @@
 
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_interchange_iq.c
-FILE_REF?=../ssa-versions/ssa_baseline.c # This line should pretty much stay the same across objectives
-
+# Update the line below accordingly
+FILE_REF?=../../objective-a/task00/ssa-versions/ssa_<version>_baseline.c
 
 
 OSACA_DOT_FILE_TST="$(FILE_TST).osaca.dot"

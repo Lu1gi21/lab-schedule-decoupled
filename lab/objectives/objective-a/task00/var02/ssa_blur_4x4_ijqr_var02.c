@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "instruments.h"
+#include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
-#define COMPUTE_NAME baseline
+#define COMPUTE_NAME ssa_baseline
 #endif
 
 #ifndef COMPUTE_FLOP_NAME
-#define COMPUTE_FLOP_NAME baseline_flop
+#define COMPUTE_FLOP_NAME ssa_baseline_flop
 #endif
 
 #ifndef COMPUTE_BYTES_NAME
-#define COMPUTE_BYTES_NAME baseline_bytes
+#define COMPUTE_BYTES_NAME ssa_baseline_bytes
 #endif
 
 // Dimensions of the Filter
@@ -23,7 +23,7 @@ static float weights[] = {
     0.33, 0.33, 0.33, 0.33,
     0.33, 0.33, 0.33, 0.33,
     0.33, 0.33, 0.33, 0.33,
-    0.33, 0.33, 0.33, 0.33 
+    0.33, 0.33, 0.33, 0.33
 };
 
 double COMPUTE_FLOP_NAME(int m0, int n0) {
@@ -37,21 +37,27 @@ double COMPUTE_BYTES_NAME(int m0, int n0) {
 void COMPUTE_NAME(int m0, int n0, float *x, float *y) {
   for (int i0 = 0; i0 < m0; ++i0) {
     for (int j0 = 0; j0 < n0; ++j0) {
+      int y_idx = i0 * n0 + j0;
+      float acc = 0.0f;
+
       for (int q0 = 0; q0 < Q; ++q0) {
         for (int r0 = 0; r0 < R; ++r0) {
           BEGIN_INSTRUMENTATION;
+
           int w_idx = q0 * R + r0;
           float w_val = weights[w_idx];
 
           int x_i = (i0 + q0) % m0;
           int x_j = (j0 + r0) % n0;
-          float x_val = x[x_i * n0 + x_j];
+          int x_idx = x_i * n0 + x_j;
+          float x_val = x[x_idx];
 
-          int y_idx = i0 * n0 + j0;
-          y[y_idx] += w_val * x_val;
+          acc += w_val * x_val;
+
           END_INSTRUMENTATION;
         }
       }
+      y[y_idx] = acc;
     }
   }
 }

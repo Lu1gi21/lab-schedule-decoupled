@@ -1,62 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "instruments.h"
+#include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
-#define COMPUTE_NAME baseline
+#define COMPUTE_NAME ssa_jacobi2d_21pt_ijqr_var07
 #endif
 
 #ifndef COMPUTE_FLOP_NAME
-#define COMPUTE_FLOP_NAME baseline_flop
+#define COMPUTE_FLOP_NAME ssa_jacobi2d_21pt_ijqr_var07_flop
 #endif
 
 #ifndef COMPUTE_BYTES_NAME
-#define COMPUTE_BYTES_NAME baseline_bytes
+#define COMPUTE_BYTES_NAME ssa_jacobi2d_21pt_ijqr_var07_bytes
 #endif
 
-// Dimensions of the Filter
-static const int R = 9;
-static const int Q = 9;
-
-// weights[(Q)*(R)] in row-major order
-static float weights[] = {
-    0.0, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.3, 0.0, 0.0, 0.0, 0.0,  
-    0.0, 0.0, 0.0, 0.0, 0.4, 0.0, 0.0, 0.0, 0.0,
-    0.1, 0.2, 0.3, 0.4, 1.0, 0.4, 0.3, 0.2, 0.1,
-    0.0, 0.0, 0.0, 0.0, 0.4, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.3, 0.0, 0.0, 0.0, 0.0,  
-    0.0, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0,    
-    0.0, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0
-};
-
 double COMPUTE_FLOP_NAME(int m0, int n0) {
-  return 2 * m0 * n0 * Q * R;
+  return 21 * 2 * m0 * n0;  // 21 adds and 1 multiply per output
 }
 
 double COMPUTE_BYTES_NAME(int m0, int n0) {
-  return (3 * m0 * n0 + Q * R) * sizeof(float);
+  return (3 * m0 * n0 + 21) * sizeof(float);  // input, output, scratch + stencil
 }
 
 void COMPUTE_NAME(int m0, int n0, float *x, float *y) {
+  const float coeff = 1.0f / 21.0f;
+
   for (int i0 = 0; i0 < m0; ++i0) {
     for (int j0 = 0; j0 < n0; ++j0) {
-      for (int q0 = 0; q0 < Q; ++q0) {
-        for (int r0 = 0; r0 < R; ++r0) {
-          BEGIN_INSTRUMENTATION;
-          int w_idx = q0 * R + r0;
-          float w_val = weights[w_idx];
+      BEGIN_INSTRUMENTATION;
 
-          int x_i = (i0 + q0) % m0;
-          int x_j = (j0 + r0) % n0;
-          float x_val = x[x_i * n0 + x_j];
+      float acc = 0.0f;
 
-          int y_idx = i0 * n0 + j0;
-          y[y_idx] += w_val * x_val;
-          END_INSTRUMENTATION;
+      for (int di = -2; di <= 2; ++di) {
+        for (int dj = -2; dj <= 2; ++dj) {
+          if (abs(di) == 2 && abs(dj) == 2) continue;  // skip corners
+
+          int ni = (i0 + di + m0) % m0;
+          int nj = (j0 + dj + n0) % n0;
+          int idx = ni * n0 + nj;
+
+          acc += x[idx];
         }
       }
+
+      int mid = i0 * n0 + j0;
+      y[mid] = acc * coeff;
+
+      END_INSTRUMENTATION;
     }
   }
 }

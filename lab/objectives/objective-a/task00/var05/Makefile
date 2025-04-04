@@ -14,7 +14,7 @@
 
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_conv_4x3_qrji_var05.c
-FILE_REF?=../ssa-versions/ssa_baseline.c # This line should pretty much stay the same across objectives
+FILE_REF?=../ssa-versions/ssa_conv_4x3_baseline.c
 
 
 
@@ -68,14 +68,14 @@ all: build-verifier build-timer
 
 
 build-verifier:
-	gcc $(CFLAGS_DEBUG) -DCOMPUTE_NAME_REF=$(NAME_REF)  -DCOMPUTE_NAME_TST=$(NAME_TST) -DCOMPUTE_FLOP_NAME_REF=$(NAME_FLOP_REF)  -DCOMPUTE_FLOP_NAME_TST=$(NAME_FLOP_TST) -c verifier.c -o verifier.o
+	gcc $(CFLAGS_DEBUG) -DCOMPUTE_NAME_REF=$(NAME_REF)  -DCOMPUTE_NAME_TST=$(NAME_TST) -DCOMPUTE_FLOP_NAME_REF=$(NAME_FLOP_REF)  -DCOMPUTE_FLOP_NAME_TST=$(NAME_FLOP_TST) -c ../common/verifier.c -o verifier.o
 	gcc $(CFLAGS_DEBUG) -DCOMPUTE_NAME=$(NAME_REF) -DCOMPUTE_FLOP_NAME=$(NAME_FLOP_REF) -DCOMPUTE_BYTES_NAME=$(NAME_BYTES_REF) -c $(FILE_REF) -o $(OBJ_FILE_REF)
 	gcc $(CFLAGS_DEBUG) -DCOMPUTE_NAME=$(NAME_TST) -DCOMPUTE_FLOP_NAME=$(NAME_FLOP_TST) -DCOMPUTE_BYTES_NAME=$(NAME_BYTES_TST) -c $(FILE_TST) -o $(OBJ_FILE_TST)
 	gcc $(CFLAGS_DEBUG) -lm $(OBJ_FILE_REF) $(OBJ_FILE_TST) verifier.o -o ./run_verifier.x
 
 
-build-timer-infrastructure: timer.c
-	gcc $(CFLAGS) -DCOMPUTE_NAME_TST=$(NAME_TST) -DCOMPUTE_FLOP_NAME_TST=$(NAME_FLOP_TST) -DCOMPUTE_BYTES_NAME_TST=$(NAME_BYTES_TST) -c timer.c -o timer.o
+build-timer-infrastructure: ../common/timer.c
+	gcc $(CFLAGS) -DCOMPUTE_NAME_TST=$(NAME_TST) -DCOMPUTE_FLOP_NAME_TST=$(NAME_FLOP_TST) -DCOMPUTE_BYTES_NAME_TST=$(NAME_BYTES_TST) -c ../common/timer.c -o timer.o
 
 
 $(OBJ_FILE_TST):$(FILE_TST)
@@ -96,7 +96,7 @@ build-timer-debug: build-timer-infrastructure $(OBJ_FILE_DBG_TST)
 # Do a smoke test for the same problem sizes as the benchmark
 measure-verifier: build-verifier
 	./run_verifier.x > $(RES_CSV_FILE_TST)
-	./verify_output.sh $(RES_CSV_FILE_TST)
+	../common/verify_output.sh $(RES_CSV_FILE_TST)
 
 
 ####
@@ -173,9 +173,9 @@ dump-asm:
 # Virtual environments activated and used in a makefile:
 # https://stackoverflow.com/questions/24736146/how-to-use-virtualenv-in-makefile
 venv: venv/touchfile
-venv/touchfile: requirements.txt
+venv/touchfile: ../common/requirements.txt
 	test -d venv || python3 -m venv venv
-	. venv/bin/activate; pip install -Ur requirements.txt
+	. venv/bin/activate; pip install -Ur ../common/requirements.txt
 	touch venv/touchfile
 
 
@@ -184,7 +184,7 @@ venv/touchfile: requirements.txt
 # with the default values. Note you can change the parameters
 # and plot multiple lines on the same plot.
 plot: venv measure-performance
-	. venv/bin/activate; ./plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST)
+	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST)
 
 
 ###
@@ -207,6 +207,7 @@ get-system-info:
 	@echo ""
 	@lscpu | grep -i "Model name:" | cut -d':' -f2- -
 
+clean-all: clean clean-results
 
 clean-results:
 	rm -f $(MCA_FILE_TST) $(MCA_ASM_FILE_TST) $(OSACA_FILE_TST) $(OSACA_ASM_FILE_TST) $(OBJDUMP_ANNOTATED_FILE_TST) $(OBJDUMP_FILE_TST) $(OBJ_FILE_TST) $(OBJ_FILE_REF) $(CACHEGRIND_FILE_TST) $(CSV_FILE_TST) $(RES_CSV_FILE_TST) $(PNG_FILE_TST) $(OBJ_FILE_DBG_TST) $(OSACA_DOT_FILE_TST)
