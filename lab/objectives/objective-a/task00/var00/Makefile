@@ -14,7 +14,7 @@
 
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_blur_2x2_ijqr_var00.c
-FILE_REF?=../ssa-versions/ssa_blur_2x2_baseline.c 
+FILE_REF?=../ssa-versions/ssa_blur_2x2_baseline.c
 
 
 

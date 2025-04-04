@@ -2,9 +2,9 @@
 
 echo "For all objectives:\n"
 
-for obj in a b c d e; do
+for obj in objective-*/; do
     echo "Running: tests for objective $obj..."
-    bash ./lab/objectives/objective-$obj/run-all-task-tests.sh
+    bash ./$obj/run-all-task-tests.sh
 done
 
 echo "All objectives successfully tested."

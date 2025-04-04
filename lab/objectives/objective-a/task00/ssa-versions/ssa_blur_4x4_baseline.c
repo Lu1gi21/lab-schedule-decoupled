@@ -3,26 +3,27 @@
 #include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
-#define COMPUTE_NAME compute_tst
+#define COMPUTE_NAME ssa_blur_4x4_baseline
 #endif
 
 #ifndef COMPUTE_FLOP_NAME
-#define COMPUTE_FLOP_NAME compute_flop_tst
+#define COMPUTE_FLOP_NAME ssa_blur_4x4_baseline_flop
 #endif
 
 #ifndef COMPUTE_BYTES_NAME
-#define COMPUTE_BYTES_NAME compute_bytes_tst
+#define COMPUTE_BYTES_NAME ssa_blur_4x4_baseline_bytes
 #endif
 
 // Dimensions of the Filter
-static const int R = 3;
-static const int Q = 3;
+static const int R = 4;
+static const int Q = 4;
 
 // weights[(Q)*(R)] in row-major order
 static float weights[] = {
-    0.33, 0.33, 0.33,
-    0.33, 0.33, 0.33,
-    0.33, 0.33, 0.33 
+    0.33, 0.33, 0.33, 0.33,
+    0.33, 0.33, 0.33, 0.33,
+    0.33, 0.33, 0.33, 0.33,
+    0.33, 0.33, 0.33, 0.33
 };
 
 double COMPUTE_FLOP_NAME(int m0, int n0) {
