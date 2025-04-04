@@ -20,11 +20,12 @@ static const int Q = 4;
 
 // Hardcoded Toeplitz-style weights (e.g., same along diagonals or symmetric-ish)
 static float weights[] = {
-    0.25, 0.5,  0.5,  0.25,
-    0.5,  1.0,  1.0,  0.5,
-    0.5,  1.0,  1.0,  0.5,
-    0.25, 0.5,  0.5,  0.25
+    -1.0,  0.20,  0.33,  0.50,
+     0.50, -1.0,  0.20,  0.33,
+     0.33,  0.50, -1.0,  0.20,
+     0.20,  0.33,  0.50, -1.0
 };
+
 
 double COMPUTE_FLOP_NAME(int m0, int n0) {
   return 2 * m0 * n0 * Q * R;

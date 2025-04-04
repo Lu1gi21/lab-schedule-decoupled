@@ -15,7 +15,7 @@
 #endif
 
 double COMPUTE_FLOP_NAME(int m0, int n0) {
-  return 21 * 2 * m0 * n0;  // 21 neighbors * (1 mul + 1 add)
+  return 21 * 2 * m0 * n0;  // 21 neighbors (no corners) * (1 mul + 1 add)
 }
 
 double COMPUTE_BYTES_NAME(int m0, int n0) {
@@ -33,6 +33,9 @@ void COMPUTE_NAME(int m0, int n0, float *x, float *y) {
 
       for (int di = -2; di <= 2; ++di) {
         for (int dj = -2; dj <= 2; ++dj) {
+          // ❗ Skip corners
+          if (abs(di) == 2 && abs(dj) == 2) continue;
+
           int ii = (i0 + di + m0) % m0;
           int jj = (j0 + dj + n0) % n0;
 

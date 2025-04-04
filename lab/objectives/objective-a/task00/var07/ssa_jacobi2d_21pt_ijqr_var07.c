@@ -15,33 +15,36 @@
 #endif
 
 double COMPUTE_FLOP_NAME(int m0, int n0) {
-  return 21 * 2 * m0 * n0;  // 21 loads + 1 mul per output
+  return 21 * 2 * m0 * n0;  // 21 adds and 1 multiply per output
 }
 
 double COMPUTE_BYTES_NAME(int m0, int n0) {
-  return (3 * m0 * n0 + 21) * sizeof(float);
+  return (3 * m0 * n0 + 21) * sizeof(float);  // input, output, scratch + stencil
 }
 
 void COMPUTE_NAME(int m0, int n0, float *x, float *y) {
+  const float coeff = 1.0f / 21.0f;
+
   for (int i0 = 0; i0 < m0; ++i0) {
     for (int j0 = 0; j0 < n0; ++j0) {
       BEGIN_INSTRUMENTATION;
 
       float acc = 0.0f;
+
       for (int di = -2; di <= 2; ++di) {
         for (int dj = -2; dj <= 2; ++dj) {
-          // Skip corners if not part of the 21-point stencil
-          if (abs(di) == 2 && abs(dj) == 2) continue;
+          if (abs(di) == 2 && abs(dj) == 2) continue;  // skip corners
 
           int ni = (i0 + di + m0) % m0;
           int nj = (j0 + dj + n0) % n0;
           int idx = ni * n0 + nj;
+
           acc += x[idx];
         }
       }
 
       int mid = i0 * n0 + j0;
-      y[mid] = acc / 21.0f;
+      y[mid] = acc * coeff;
 
       END_INSTRUMENTATION;
     }
