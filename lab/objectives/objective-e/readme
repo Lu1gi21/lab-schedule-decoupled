@@ -1,0 +1,9 @@
+The naming conventions on tasks 0-2 can look odd at first for the C files therein.
+
+For task 00 and task 02 the way to read them is as follows:
+       The first three characters tells you the schedule used, so b for blur, and the two numbers relate to the matrix size of the specified schedule file. 22 translates to the 2x2 matrix, or 43 would be a 4x3 matrix. 
+
+       The second part seen is the operation file that was used alongside it, with it being abreviated but distinct. Each of the operations is stored in the same task folder so it can be inspected easily.
+
+For task 01 the way to read them is as follows:
+       The first part relates to the schedule file used, which was complex_l3, and the trailing part was the operation file that is associated following the same conventions as above, as well as an abreviation of the convolution filter based on the order of the loop inside. 
