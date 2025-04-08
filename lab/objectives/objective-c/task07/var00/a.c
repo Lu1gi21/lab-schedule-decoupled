@@ -67,17 +67,10 @@ void COMPUTE_NAME( int m0,
             float res_wx    = w_qr * x_iqjr;                        // multiply x by the weight
             float acc_y_ij  = y_ij + res_wx;                        // accumulate the result
             *y_ij_addr      = acc_y_ij;                             // write the result back
-            
-        END_INSTRUMENTATION; // loop:r0
-          }
-        // END_INSTRUMENTATION; // loop:q0
-      }
-      // END_INSTRUMENTATION; // loop:j0
-    }
-      // END_INSTRUMENTATION; // loop:i0
-    }
-  // END_INSTRUMENTATION; // func:compute_name
-  
-}
 
+}
+}
+}
+}
+}
 }

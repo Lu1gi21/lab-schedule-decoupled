@@ -73,21 +73,10 @@ computations = """
             float res_wx    = w_qr * x_iqjr;                        // multiply x by the weight
             float acc_y_ij  = y_ij + res_wx;                        // accumulate the result
             *y_ij_addr      = acc_y_ij;                             // write the result back
+
 """
 
-loop_ends = """            
-        END_INSTRUMENTATION; // loop:r0
-          }
-        // END_INSTRUMENTATION; // loop:q0
-      }
-      // END_INSTRUMENTATION; // loop:j0
-    }
-      // END_INSTRUMENTATION; // loop:i0
-    }
-  // END_INSTRUMENTATION; // func:compute_name
-  
-}
-"""
+loop_ends = "}"
 
 
 class Expr:
@@ -128,9 +117,6 @@ class CompileC:
                     computations = computations.replace(s_var, f"({var0} + {var1})")
                 return computations
             case Expr("[loop_ends]", params):
-                global loop_ends
-                if self.CompileExpr(params[0], env):
-                    loop_ends += "\n}"
                 return loop_ends
             case _:
                 raise Exception('Error, unexpected expreession' + repr(e))
@@ -225,8 +211,13 @@ def main():
     compute = Expr("[computations]", [Constant(is_split), Constant(split_var), Constant(var0), Constant(var1)])
   else:
     compute = Expr("[computations]", [Constant(is_split)])
-  
-  endLoop = Expr("[loop_ends]", [Constant(is_split)])
+
+  global loop_ends
+  for i in loop_array:
+      loop_ends += "\n}"
+
+  endLoop = Expr("[loop_ends]", [])
+
 
   boilers = BinOp(boiler1, Add(), BinOp(weights, Add(), boiler2))
 
