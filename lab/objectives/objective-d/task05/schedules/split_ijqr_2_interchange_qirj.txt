@@ -1,0 +1,4 @@
+split i0 i0_o i0_i 2
+split j0 j0_o j0_i 2
+interchange q0 i0
+interchange r0 j0

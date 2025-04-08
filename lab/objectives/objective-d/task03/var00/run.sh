@@ -1,4 +1,4 @@
-echo "ENTER SWAP (Note: must be exact operation name; e.g. enter 'conv_4x3_ijqr')"
+echo "ENTER OPERATION (Note: must be exact operation name; e.g. enter 'conv_4x3_ijqr')"
 READ OP
 echo "Note: this is for four interchanges, so the only swap is all 4 swaps."
 SWAP="all"
