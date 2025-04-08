@@ -1,0 +1,4 @@
+interchange j0 i0
+interchange q0 j0
+interchange r0 q0
+interchange r0 i0
