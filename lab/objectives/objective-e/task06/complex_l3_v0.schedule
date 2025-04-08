@@ -1,0 +1,4 @@
+split i0 i0_o i0_i 32
+interchange r0 i0_i
+unroll q0
+unroll i0_i
