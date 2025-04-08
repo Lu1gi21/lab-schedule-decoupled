@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "instruments.h"
+#include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
 #define COMPUTE_NAME baseline
@@ -37,9 +37,11 @@ double COMPUTE_BYTES_NAME(int m0, int n0) {
 void COMPUTE_NAME(int m0, int n0, float *x, float *y) {
   for (int i0 = 0; i0 < m0; ++i0) {
     for (int j0 = 0; j0 < n0; ++j0) {
+      BEGIN_INSTRUMENTATION;
+
+      float acc = 0.0f;
       for (int q0 = 0; q0 < Q; ++q0) {
         for (int r0 = 0; r0 < R; ++r0) {
-          BEGIN_INSTRUMENTATION;
           int w_idx = q0 * R + r0;
           float w_val = weights[w_idx];
 
@@ -47,11 +49,14 @@ void COMPUTE_NAME(int m0, int n0, float *x, float *y) {
           int x_j = (j0 + r0) % n0;
           float x_val = x[x_i * n0 + x_j];
 
-          int y_idx = i0 * n0 + j0;
-          y[y_idx] += w_val * x_val;
-          END_INSTRUMENTATION;
+          acc += w_val * x_val;
         }
       }
+
+      int y_idx = i0 * n0 + j0;
+      y[y_idx] = acc;
+
+      END_INSTRUMENTATION;
     }
   }
 }

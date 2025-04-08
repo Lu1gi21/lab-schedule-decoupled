@@ -1,8 +1,6 @@
-#1/bin/bash
+#!/bin/bash
 
-for obj in a b c d e; do
-    echo "Running: verify for objective $obj..."
-    bash ./lab/objectives/objective-$obj/run-all-verify.sh
+for obj in objective-*/; do
+    echo "Running: verifying $(basename $obj)..."
+    bash $obj/run-all-verify.sh
 done
-
-echo "All objectives successfully verified."
