@@ -68,7 +68,7 @@ def generate_unrolled_q0_code(op_file, output_file):
 
     code = f"""#include <stdio.h>
 #include <stdlib.h>
-#include "instruments.h"
+#include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
 #define COMPUTE_NAME baseline

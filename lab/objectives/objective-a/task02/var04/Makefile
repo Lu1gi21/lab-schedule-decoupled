@@ -15,7 +15,7 @@
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_jacobi2d_5pt_spliti_var04.c
 # Update the line below accordingly
-FILE_REF?=../task00/ssa-versions/ssa_jacobi2d_5pt_baseline.c
+FILE_REF?=../../task00/ssa-versions/ssa_jacobi2d_5pt_baseline.c
 
 
 OSACA_DOT_FILE_TST="$(FILE_TST).osaca.dot"
