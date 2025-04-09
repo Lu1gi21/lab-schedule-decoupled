@@ -183,8 +183,19 @@ venv/touchfile: ../common/requirements.txt
 # plot results for a single run of the implementation
 # with the default values. Note you can change the parameters
 # and plot multiple lines on the same plot.
-plot: venv measure-performance
+# plot: venv measure-performance
+# 	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST)
+# Plot only the variant
+# Plot variant GFLOP curve only
+plot-variant: venv measure-performance
 	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST)
+
+# Plot variant vs its baseline (update the baseline CSV filename to match)
+plot-vs-baseline: venv measure-performance
+	. venv/bin/activate; ../common/plotter.py comparison-$(PNG_FILE_TST) $(FILE_REF).csv $(CSV_FILE_TST)
+
+# Generate both plots
+plot-all: plot-variant plot-vs-baseline
 
 
 ###

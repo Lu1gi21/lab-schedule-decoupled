@@ -16,8 +16,7 @@ from blur_3x3_ijqr.operation
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "instruments.h"
+#include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
 #define COMPUTE_NAME baseline
