@@ -10,11 +10,19 @@
 
 extern void COMPUTE_NAME_REF( int m0, int n0,
 			      float *input_x,
-			      float *output_y );
+			      float *output_y ){
+              for (int i = 0; i < m0 * n0; ++i) {
+                output_y[i] = input_x[j] * 2.0f;
+              }
+            }
 
 extern void COMPUTE_NAME_TST( int m0, int n0,
 			      float *input_x,
-			      float *output_y );
+			      float *output_y ){
+              for (int i = 0; i < m0 * n0; ++i) {
+                output_y[i] = input_x[i] * 2.0f;
+              }
+            }
 
 void fill_buffer_with_random( int num_elems, float *buff )
 {

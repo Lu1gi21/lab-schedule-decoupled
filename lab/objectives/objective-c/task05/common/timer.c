@@ -12,10 +12,37 @@
 
 extern void COMPUTE_NAME_TST( int m0, int n0,
 			      float *input_x,
-			      float *output_y );
+			      float *output_y ){
+              for (int i0 = 0; i0 < m0; ++i0) {
+                for (int j0 = 0; j0 < n0; ++j0) {
+                  float acc = 0.0f;
+                  for (int q0 = 0; q0 < 3; ++q0) {
+                    for (int r0 = 0; r00 < 4; ++r0) {
+                      int src_i = (q0 + i0) % m0;
+                      int src_j = (r0 + j0) % n0;
+                      acc += weights[q0 * 4 + r0] * x[src_i * n0 + src_j];
+                    }
+                  }
+                  y[i0 * n0 + j0] = acc;
+                }
+              }
+            }
 
-extern double COMPUTE_FLOP_NAME_TST( int m0, int n0 );
-extern double COMPUTE_BYTES_NAME_TST( int m0, int n0 );
+extern double COMPUTE_FLOP_NAME_TST( int m0, int n0 ){
+  int q = 3;
+  int r = 4;
+  return (double)(m0 * n0 * q * r * 2);
+}
+
+extern double COMPUTE_BYTES_NAME_TST( int m0, int n0 ){
+  int q = 3;
+  int r = 4;
+  return (double)(sizeof(float) * (
+    m0 * n0
+    m0 * n0
+    q * r
+  ));
+}
 
 
 
