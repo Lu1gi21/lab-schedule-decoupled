@@ -15,13 +15,13 @@
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_split_r_ro_ri_2.c
 # Update the line below accordingly
-FILE_REF?=../../objective-a/task00/ssa-versions/ssa_<version>_baseline.c
+FILE_REF?=../../../objective-a/task00/ssa-versions/ssa_blur_4x4_baseline.c
 
 
 OSACA_DOT_FILE_TST="$(FILE_TST).osaca.dot"
 # NOTE: requires graphviz to be installed locally
 # https://pygraphviz.github.io/documentation/stable/install.html
-# install graphiz locally and add pygraphviz to requirements.txt
+# install graphiz locally and add pygraphviz to ../common/requirements.txt
 #OSACA_FLAGS?=--export-graph $(OSACA_DOT_FILE_TST)
 OSACA_FLAGS?=
 
@@ -74,8 +74,8 @@ build-verifier:
 	gcc $(CFLAGS_DEBUG) -lm $(OBJ_FILE_REF) $(OBJ_FILE_TST) verifier.o -o ./run_verifier.x
 
 
-build-timer-infrastructure: timer.c
-	gcc $(CFLAGS) -DCOMPUTE_NAME_TST=$(NAME_TST) -DCOMPUTE_FLOP_NAME_TST=$(NAME_FLOP_TST) -DCOMPUTE_BYTES_NAME_TST=$(NAME_BYTES_TST) -c timer.c -o timer.o
+build-timer-infrastructure: ../common/timer.c
+	gcc $(CFLAGS) -DCOMPUTE_NAME_TST=$(NAME_TST) -DCOMPUTE_FLOP_NAME_TST=$(NAME_FLOP_TST) -DCOMPUTE_BYTES_NAME_TST=$(NAME_BYTES_TST) -c ../common/../common/timer.c -o timer.o
 
 
 $(OBJ_FILE_TST):$(FILE_TST)
@@ -173,9 +173,9 @@ dump-asm:
 # Virtual environments activated and used in a makefile:
 # https://stackoverflow.com/questions/24736146/how-to-use-virtualenv-in-makefile
 venv: venv/touchfile
-venv/touchfile: requirements.txt
+venv/touchfile: ../common/requirements.txt
 	test -d venv || python3 -m venv venv
-	. venv/bin/activate; pip install -Ur requirements.txt
+	. venv/bin/activate; pip install -Ur ../common/requirements.txt
 	touch venv/touchfile
 
 
@@ -183,8 +183,14 @@ venv/touchfile: requirements.txt
 # plot results for a single run of the implementation
 # with the default values. Note you can change the parameters
 # and plot multiple lines on the same plot.
-plot: venv measure-performance
-	. venv/bin/activate; ./plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST)
+plot-variant: venv measure-performance
+	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST) --peak=3 --min=0
+
+plot-vs-baseline: venv measure-performance
+	. venv/bin/activate; ../common/plotter.py "comparison-$(notdir $(FILE_TST)).png" $(FILE_REF).csv $(CSV_FILE_TST) --peak=3 --min=0
+
+plot-all: plot-variant plot-vs-baseline
+
 
 
 ###
