@@ -74,8 +74,8 @@ build-verifier:
 	gcc $(CFLAGS_DEBUG) -lm $(OBJ_FILE_REF) $(OBJ_FILE_TST) verifier.o -o ./run_verifier.x
 
 
-build-timer-infrastructure: timer.c
-	gcc $(CFLAGS) -DCOMPUTE_NAME_TST=$(NAME_TST) -DCOMPUTE_FLOP_NAME_TST=$(NAME_FLOP_TST) -DCOMPUTE_BYTES_NAME_TST=$(NAME_BYTES_TST) -c timer.c -o timer.o
+build-timer-infrastructure: ../common/timer.c
+	gcc $(CFLAGS) -DCOMPUTE_NAME_TST=$(NAME_TST) -DCOMPUTE_FLOP_NAME_TST=$(NAME_FLOP_TST) -DCOMPUTE_BYTES_NAME_TST=$(NAME_BYTES_TST) -c ../common/timer.c -o timer.o
 
 
 $(OBJ_FILE_TST):$(FILE_TST)
@@ -173,9 +173,9 @@ dump-asm:
 # Virtual environments activated and used in a makefile:
 # https://stackoverflow.com/questions/24736146/how-to-use-virtualenv-in-makefile
 venv: venv/touchfile
-venv/touchfile: requirements.txt
+venv/touchfile: ../common/requirements.txt
 	test -d venv || python3 -m venv venv
-	. venv/bin/activate; pip install -Ur requirements.txt
+	. venv/bin/activate; pip install -Ur ../common/requirements.txt
 	touch venv/touchfile
 
 

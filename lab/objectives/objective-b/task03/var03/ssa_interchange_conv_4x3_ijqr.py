@@ -5,7 +5,7 @@
 # colemanbixler@ou.edu 
 
 import sys
-import ipdb
+# import ipdb
 
 prog = """
 #include <stdio.h>
@@ -182,7 +182,7 @@ def main():
         prog = prog.replace(placeholder, second_comment)
         
     # write to output program
-    f = open(f"interchanged-versions/{outfile_name}", "w")
+    f = open(f"{outfile_name}", "w")
     f.write(prog)
     f.close()
 
