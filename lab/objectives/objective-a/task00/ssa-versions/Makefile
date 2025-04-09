@@ -1,14 +1,14 @@
 # ssa-versions/Makefile
 
 CFILES := $(wildcard ssa_*.c)
-CSVFILES := $(CFILES:.c=.csv)
+CSVFILES := $(CFILES:%=%.csv)
 
 CFLAGS := -std=c99 -O2 -mavx2 -mfma -fopenmp -I../common
 LDFLAGS := -lm
 
 all: $(CSVFILES)
 
-%.csv: %.c ../common/timer.c
+%.c.csv: %.c ../common/timer.c
 	@echo "Generating CSV for $<"
 	gcc $(CFLAGS) \
 		-DCOMPUTE_NAME=compute_tst \
@@ -23,7 +23,6 @@ all: $(CSVFILES)
 	gcc $<.o timer.o -o run_timer.x $(LDFLAGS)
 	./run_timer.x | tee $@
 	rm -f $<.o timer.o run_timer.x
-
 
 clean:
 	rm -f *.csv *.o *.x
