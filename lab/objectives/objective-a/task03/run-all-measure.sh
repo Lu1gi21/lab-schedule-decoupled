@@ -5,8 +5,11 @@ if [[ "$1" == "--full" ]]; then
     FULL=true
 fi
 
-bash ../../generate-baselines.sh
-bash ./interchange-versions/generate-all-interchanges.sh
+cd ../task00
+bash ./generate-all-baselines.sh
+cd ../task03/interchange-versions
+make all
+cd ../
 
 for variant in var*/; do
     echo "Running: measuring $(basename "$variant")..."

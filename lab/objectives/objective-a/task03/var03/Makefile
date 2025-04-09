@@ -13,7 +13,7 @@
 # make all FILE_TST=test_varXXX.c  FILE_REF=baseline.c CFLAGS="-O3"
 
 # This line may need to be updated to match your file in case I missed it...
-FILE_TST?=../interchanged-versions/ssa-interchange-conv_4x3_ijqr_interchange_qj.c
+FILE_TST?=../interchange-versions/ssa-interchange-conv_4x3_ijqr_interchange_qj.c
 # Update the line below accordingly
 FILE_REF?=../../task00/ssa-versions/ssa_conv_4x3_baseline.c
 
@@ -183,9 +183,13 @@ venv/touchfile: ../common/requirements.txt
 # plot results for a single run of the implementation
 # with the default values. Note you can change the parameters
 # and plot multiple lines on the same plot.
-plot: venv measure-performance
-	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST)
+plot-variant: venv measure-performance
+	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST) --peak=1.5 --min=0.5
 
+plot-vs-baseline: venv measure-performance
+	. venv/bin/activate; ../common/plotter.py "comparison-$(notdir $(FILE_TST)).png" $(FILE_REF).csv $(CSV_FILE_TST) --peak=1.5 --min=0.5
+
+plot-all: plot-variant plot-vs-baseline
 
 ###
 # Get the system details that are useful for these experiments
