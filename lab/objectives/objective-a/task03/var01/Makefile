@@ -13,9 +13,9 @@
 # make all FILE_TST=test_varXXX.c  FILE_REF=baseline.c CFLAGS="-O3"
 
 # This line may need to be updated to match your file in case I missed it...
-FILE_TST?=ssa_interchange-conv_4x3_ijqr_interchangevar00_qi.c
+FILE_TST?=../interchanged-versions/ssa-interchange-conv_4x3_ijqr_interchange_qi.c
 # Update the line below accordingly
-FILE_REF?=../task00/ssa-versions/ssa_<version>_baseline.c
+FILE_REF?=../../task00/ssa-versions/ssa_conv_4x3_baseline.c
 
 
 

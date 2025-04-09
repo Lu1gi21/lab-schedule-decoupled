@@ -184,10 +184,10 @@ venv/touchfile: ../common/requirements.txt
 # with the default values. Note you can change the parameters
 # and plot multiple lines on the same plot.
 plot-variant: venv measure-performance
-	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST) --peak=1 --min=0.7
+	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST) --peak=0.85 --min=0.8
 
 plot-vs-baseline: venv measure-performance
-	. venv/bin/activate; ../common/plotter.py comparison-$(PNG_FILE_TST) $(FILE_REF).csv $(CSV_FILE_TST) --peak=1 --min=0.7
+	. venv/bin/activate; ../common/plotter.py comparison-$(PNG_FILE_TST) $(FILE_REF).csv $(CSV_FILE_TST) --peak=0.85 --min=0.8
 
 plot-all: plot-variant plot-vs-baseline
 ###

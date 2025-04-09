@@ -15,7 +15,7 @@
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_blur2x2_ijqr_unrollvar02_ijqr.c
 # Update the line below accordingly
-FILE_REF?=../task00/ssa-versions/ssa_<version>_baseline.c
+FILE_REF?=../task00/ssa-versions/ssa_blur_2x2_baseline.c
 
 
 OSACA_DOT_FILE_TST="$(FILE_TST).osaca.dot"
