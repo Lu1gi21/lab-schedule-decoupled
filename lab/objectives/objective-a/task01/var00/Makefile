@@ -15,7 +15,7 @@
 # This line may need to be updated to match your file in case I missed it...
 FILE_TST?=ssa_conv4x3_qrij_unrollvar00_ijqr.c
 # Update the line below accordingly
-FILE_REF?=../task00/ssa-versions/ssa_conv_4x3_baseline.c
+FILE_REF?=../../task00/ssa-versions/ssa_conv_4x3_baseline.c
 
 
 OSACA_DOT_FILE_TST="$(FILE_TST).osaca.dot"
@@ -188,11 +188,11 @@ venv/touchfile: ../common/requirements.txt
 # Plot only the variant
 # Plot variant GFLOP curve only
 plot-variant: venv measure-performance
-	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST)
+	. venv/bin/activate; ../common/plotter.py $(PNG_FILE_TST) $(CSV_FILE_TST) --peak=1.1 --min=0.7
 
 # Plot variant vs its baseline (update the baseline CSV filename to match)
 plot-vs-baseline: venv measure-performance
-	. venv/bin/activate; ../common/plotter.py comparison-$(PNG_FILE_TST) $(FILE_REF).csv $(CSV_FILE_TST)
+	. venv/bin/activate; ../common/plotter.py comparison-$(PNG_FILE_TST) $(FILE_REF).csv $(CSV_FILE_TST) --peak=1.1 --min=0.7
 
 # Generate both plots
 plot-all: plot-variant plot-vs-baseline
