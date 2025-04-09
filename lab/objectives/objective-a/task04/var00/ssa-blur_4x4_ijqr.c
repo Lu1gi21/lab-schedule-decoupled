@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "instruments.h"
+#include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
 #define COMPUTE_NAME baseline
@@ -54,31 +54,31 @@ static const int Q = 4;
 
 */
 
-void COMPUTE_NAME( int m0,
-  int n0,
-  float *x,
-  float *y )
+// void COMPUTE_NAME( int m0,
+//   int n0,
+//   float *x,
+//   float *y )
 
-{
+// {
 //weights[(Q)][(R)]
 //weights[(Q)*(R)]
-static float weights[] =
-  //r=0    1     2     3
-  {0.33, 0.33, 0.33, 0.33,    // q=0
-   0.33, 0.33, 0.33, 0.33,   // q=1
-   0.33, 0.33, 0.33, 0.33,   // q=2
-   0.33, 0.33, 0.33, 0.33    // q=3
-  }; 
-  BEGIN_INSTRUMENTATION; // func:compute_name
-  for( int i0 = 0; i0 < m0; ++i0 )
-    for( int j0 = 0; j0 < n0; ++j0 )
-	    for( int q0 = 0; q0 < (Q); ++q0 )
-        for( int r0 = 0; r0 < (R); ++r0 )
-		      y[i0*n0+j0]  += weights[q0*(R)+r0] *
-		        x[ ((q0+i0)%m0)*n0 + ((r0+j0)%n0)  ];
-		END_INSTRUMENTATION;
+// static float weights[] =
+//   //r=0    1     2     3
+//   {0.33, 0.33, 0.33, 0.33,    // q=0
+//    0.33, 0.33, 0.33, 0.33,   // q=1
+//    0.33, 0.33, 0.33, 0.33,   // q=2
+//    0.33, 0.33, 0.33, 0.33    // q=3
+//   }; 
+//   BEGIN_INSTRUMENTATION; // func:compute_name
+//   for( int i0 = 0; i0 < m0; ++i0 )
+//     for( int j0 = 0; j0 < n0; ++j0 )
+// 	    for( int q0 = 0; q0 < (Q); ++q0 )
+//         for( int r0 = 0; r0 < (R); ++r0 )
+// 		      y[i0*n0+j0]  += weights[q0*(R)+r0] *
+// 		        x[ ((q0+i0)%m0)*n0 + ((r0+j0)%n0)  ];
+// 		END_INSTRUMENTATION;
 
-}
+// }
 
 double COMPUTE_FLOP_NAME( int m0, int n0 )
 {
@@ -234,4 +234,5 @@ void COMPUTE_NAME_UNROLL ( int m0, int n0, float *x, float *y, float *weights) {
         }
       }
     }
+  }
 }
