@@ -12,10 +12,19 @@
 
 extern void COMPUTE_NAME_TST( int m0, int n0,
 			      float *input_x,
-			      float *output_y );
+			      float *output_y ){
+              for (int i = 0; i < m0 * n0; ++i) {
+                output_y[i] = input_x[i] * 2.0f;
+              }
+            }
 
-extern double COMPUTE_FLOP_NAME_TST( int m0, int n0 );
-extern double COMPUTE_BYTES_NAME_TST( int m0, int n0 );
+extern double COMPUTE_FLOP_NAME_TST( int m0, int n0 ){
+  return (double)(m0 * n0);
+}
+
+extern double COMPUTE_BYTES_NAME_TST( int m0, int n0 ){
+  return 2.0 * m0 * n0 * sizeof(float);
+}
 
 
 
