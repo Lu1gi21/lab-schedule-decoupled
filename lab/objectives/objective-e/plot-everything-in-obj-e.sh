@@ -21,7 +21,7 @@ if [[ ${#csvs[@]} -eq 0 ]]; then
 fi
 
 # Run the plotter on all collected CSVs
-python3 "$PLOTTER" "$OUTPUT" "${csvs[@]}" --peak=3 --min=0
+python3 "$PLOTTER" "$OUTPUT" "${csvs[@]}" --peak=9 --min=0
 
 if [[ $? -eq 0 ]]; then
     echo "Plot generated: $OUTPUT"
