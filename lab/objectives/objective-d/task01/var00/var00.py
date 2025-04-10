@@ -265,6 +265,53 @@ def main():
     c = CompileC()
     final_code = c.CompileCode(mod)
     
+    code = final_code
+    
+    print(unroll_var)
+    
+    next_line = schedule_file.readline().strip()
+    if next_line.startswith('unroll'):
+        unroll_var = next_line.split()[1]
+    
+    boiler1      = Expr("[sec_one]", [Constant(Q_val), Constant(R_val)])
+    weights_expr = Expr("[weights]", Constant(weights_str))
+    boiler2      = Expr("[sec_two]", [])
+
+    i = 0
+    loops = []
+    while i < len(loop_order):
+        var = loop_order[i]
+        if var == unroll_var:
+            bound_val = unroll_bounds[var]
+            r0_loop = Expr("[loop]", [Constant("r0"), Constant("R")])
+            comp_nodes = Expr("[computations]", [])
+            unrolled = Expr("[unrolled_loop]", [Constant(var), Constant(bound_val), r0_loop, comp_nodes])
+            loops.append(unrolled)
+            i += 2
+        else:
+
+            bound_str = iterators[var]
+            loops.append(Expr("[loop]", [Constant(var), Constant(bound_str)]))
+            i += 1
+
+
+    close_loops = Expr("[loop_ends]", [])
+
+
+    combined_ast = boiler1
+    combined_ast = BinOp(combined_ast, Add(), weights_expr)
+    combined_ast = BinOp(combined_ast, Add(), boiler2)
+    for ln in loops:
+        combined_ast = BinOp(combined_ast, Add(), ln)
+    combined_ast = BinOp(combined_ast, Add(), close_loops)
+
+    top_expr = Expr(combined_ast, [])
+    mod = Module([top_expr])
+    c = CompileC()
+    final_code = c.CompileCode(mod)
+    
+    print(unroll_var)
+    
     schedule_file.close()
 
     with open(output_file_name, "w") as out:
