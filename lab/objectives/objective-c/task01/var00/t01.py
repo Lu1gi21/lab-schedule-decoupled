@@ -163,7 +163,6 @@ def main():
   R, Q = operation.readline().strip().split(" ")
 
   weights_arr = []
-
   weights_str = "{"
 
   for i in range(int(R)):
@@ -195,25 +194,19 @@ def main():
   endLoop = Expr("[loop_ends]", [])
 
   boilers = BinOp(boiler1, Add(), BinOp(weights, Add(), boiler2))
-
   loops = BinOp(loop1, Add(), BinOp(loop2, Add(), BinOp(loop3, Add(), loop4)))
-
   ast = Expr(BinOp(boilers, Add(), BinOp(loops, Add(), BinOp(compute, Add(), endLoop))), [])
 
   mod = Module([ast])
-
   c = CompileC()
-
   code = c.CompileCode(mod)
 
 
-  out = open(output_file_name, "w")
-  out.write(code)
-  out.close()
+  with open(output_file_name, "w") as out:
+    out.write(code)
 
   exit(0)
       
-
 
 if __name__ == '__main__':
     main()
