@@ -3,15 +3,15 @@
 #include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
-#define COMPUTE_NAME ssa_blur_4x4_baseline
+#define COMPUTE_NAME ss_blur_4x4_baseline
 #endif
 
 #ifndef COMPUTE_FLOP_NAME
-#define COMPUTE_FLOP_NAME ssa_blur_4x4_baseline_flop
+#define COMPUTE_FLOP_NAME ss_blur_4x4_baseline_flop
 #endif
 
 #ifndef COMPUTE_BYTES_NAME
-#define COMPUTE_BYTES_NAME ssa_blur_4x4_baseline_bytes
+#define COMPUTE_BYTES_NAME ss_blur_4x4_baseline_bytes
 #endif
 
 // Dimensions of the Filter
@@ -43,21 +43,16 @@ void COMPUTE_NAME(int m0, int n0, float *x, float *y) {
       for (int q0 = 0; q0 < Q; ++q0) {
         for (int r0 = 0; r0 < R; ++r0) {
           BEGIN_INSTRUMENTATION;
-
-          int w_idx = q0 * R + r0;
-          float w_val = weights[w_idx];
-
           int x_i = (i0 + q0) % m0;
           int x_j = (j0 + r0) % n0;
-          int x_idx = x_i * n0 + x_j;
-          float x_val = x[x_idx];
+          acc += weights[q0 * R + r0] *
+          x[x_i * n0 + x_j];
 
-          acc += w_val * x_val;
 
           END_INSTRUMENTATION;
         }
       }
-      y[y_idx] = acc;
+      y[i0 * n0 + j0] = acc;
     }
   }
 }

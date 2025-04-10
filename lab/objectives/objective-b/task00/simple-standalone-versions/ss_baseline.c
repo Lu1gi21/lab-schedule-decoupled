@@ -10,15 +10,15 @@
 #include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
-#define COMPUTE_NAME ssa_baseline
+#define COMPUTE_NAME ss_baseline
 #endif
 
 #ifndef COMPUTE_FLOP_NAME
-#define COMPUTE_FLOP_NAME ssa_baseline_flop
+#define COMPUTE_FLOP_NAME ss_baseline_flop
 #endif
 
 #ifndef COMPUTE_BYTES_NAME
-#define COMPUTE_BYTES_NAME ssa_baseline_bytes
+#define COMPUTE_BYTES_NAME ss_baseline_bytes
 #endif
 
 // Dimensions of the Filter
@@ -47,30 +47,8 @@ void COMPUTE_NAME(int m0, int n0, float *x, float *y) {
         for(int r0 = 0; r0 < (R); ++r0) {
           BEGIN_INSTRUMENTATION; // loop:r0
           
-          // Compute weight access
-          int w_qr_offset = q0*(R);
-          int w_qr_idx = w_qr_offset + r0;
-          float *w_qr_addr = &weights[w_qr_idx];
-          float w_qr = *w_qr_addr;
-          
-          // Compute x array access
-          int iq_shift = q0 + i0;
-          int iq_row_wrap = iq_shift % m0;
-          int jr_shift = r0 + j0;
-          int jr_col_wrap = jr_shift % n0;
-          int x_row_offset = iq_row_wrap * n0;
-          int x_iqjr_idx = x_row_offset + jr_col_wrap;
-          float *x_iqjr_addr = &x[x_iqjr_idx];
-          float x_iqjr = *x_iqjr_addr;
-          
-          // Compute y array access and update
-          int y_ij_offset = i0 * n0;
-          int y_ij_idx = y_ij_offset + j0;
-          float *y_ij_addr = &y[y_ij_idx];
-          float y_ij = *y_ij_addr;
-          float res_wx = w_qr * x_iqjr;
-          float acc_y_ij = y_ij + res_wx;
-          *y_ij_addr = acc_y_ij;
+          y[i0 * n0 + j0] += weights[q0][r0] *
+              x[((q0 + i0) % m0) * n0 + ((r0 + j0) % n0)];
           
           END_INSTRUMENTATION; // loop:r0
         }

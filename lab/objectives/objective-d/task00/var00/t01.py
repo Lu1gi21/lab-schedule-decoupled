@@ -150,6 +150,58 @@ class CompileC:
                 raise Exception("Error, unexpected body" + repr(p))
 
 
+class Scheduler:
+    def __init__(self, commands):
+        self.commands = commands
+
+    def apply_schedule(self, ast):
+        for cmd in self.commands:
+            tokens = cmd.split()
+            if tokens[0] == "split": ast = self.split(ast, *tokens[1:])
+            elif tokens[0] == "interchange": ast = self.interchange(ast, *tokens[1:])
+            elif tokens[0] == "unroll": ast = self.unroll(ast, tokens[1])
+        return ast
+    
+    def split(self, ast, old_index, outer, inner, factor):
+        def transform(node):
+            match node:
+            case Expr("[loop]", [Constant(i), Constant(b)]) if i == old_index:
+                outer_loop = Expr("[loop]", [Constant(outer), Constant(f"{b}//{factor}")]) 
+                inter_loop = Expr("[loop]", [Constant(inner), Constant(factor)])
+                return BinOp(outer_loop, Add(), inner_loop)
+            case: BinOp(left, Add(), right): return BinOp(transformation(left), Add(), transform(right))
+            case _: return node
+        return transform(ast)
+
+    def interchange(self, ast, i1, i2):
+        def _is_loop(node, idx):
+            return isinstance(node, Expr) and node.label == "[loop]" and node.params[0].value == idx
+
+        def swap(node):
+            if isinstance(node, BinOp):
+                l, r = node.left, node.right
+                if _is_loop(l, i1) and _is_loop(r, i2):
+                    return BinOp(r, Add(), l)
+                else:
+                    return BinOp(swap(l), Add(), swap(r))
+            return node
+
+        return swap(ast)
+
+    def unroll(self, ast, idx):
+        def _is_loop(node, idx):
+            return isinstance(node, Expr) and node.label == "[loop]" and node.params[0].value == idx
+
+        def transform(node):
+            if isinstance(node, BinOp):
+                l, r = node.left, node.right
+                if _is_loop(l, idx):
+                    return BinOp(r, Add(), r)  # naive factor=2
+                return BinOp(transform(l), Add(), transform(r))
+            return node
+
+        return transform(ast)
+            
 def main():
   if len(sys.argv) != 3:
     print(f"Use as: python3 {sys.argv[0]} <outputFile> <operation>")
@@ -158,12 +210,10 @@ def main():
   output_file_name = sys.argv[1]
   operation_file = sys.argv[2]
 
-  operation = open(operation_file, 'r')
-
-  R, Q = operation.readline().strip().split(" ")
-
-  weights_arr = []
-  weights_str = "{"
+  with open(operation_file, 'r') as op:
+      R, Q = operation.readline().strip().split(" ")
+      weights_arr = []
+      weights_str = "{" 
 
   for i in range(int(R)):
       weights_arr += [s for s in operation.readline().strip().split(" ") if s]
@@ -193,11 +243,20 @@ def main():
   compute = Expr("[computations]", [])
   endLoop = Expr("[loop_ends]", [])
 
-  boilers = BinOp(boiler1, Add(), BinOp(weights, Add(), boiler2))
-  loops = BinOp(loop1, Add(), BinOp(loop2, Add(), BinOp(loop3, Add(), loop4)))
-  ast = Expr(BinOp(boilers, Add(), BinOp(loops, Add(), BinOp(compute, Add(), endLoop))), [])
+  ast = boiler1
+  for part in [weights_node, boiler2] + loops + [compute, endLoop]:
+    ast = BinOp(ast, Add(), part)
 
-  mod = Module([ast])
+  sechedule_cmds = [
+    "split j0 j0_o j0_i 2",
+    "interchange r0 j0_i",
+    "unroll j0_i"
+  ]
+
+  scheduler = Scheduler(schedule_cmds)
+  transformed_ast = scheduler.apply_schedule(ast)
+
+  mod = Module([transformed_ast])
   c = CompileC()
   code = c.CompileCode(mod)
 

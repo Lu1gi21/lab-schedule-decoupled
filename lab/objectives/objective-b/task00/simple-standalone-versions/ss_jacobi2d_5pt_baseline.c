@@ -3,15 +3,15 @@
 #include "../common/instruments.h"
 
 #ifndef COMPUTE_NAME
-#define COMPUTE_NAME ssa_jacobi2d_5pt_baseline
+#define COMPUTE_NAME ss_jacobi2d_5pt_baseline
 #endif
 
 #ifndef COMPUTE_FLOP_NAME
-#define COMPUTE_FLOP_NAME ssa_jacobi2d_5pt_baseline_flop
+#define COMPUTE_FLOP_NAME ss_jacobi2d_5pt_baseline_flop
 #endif
 
 #ifndef COMPUTE_BYTES_NAME
-#define COMPUTE_BYTES_NAME ssa_jacobi2d_5pt_baseline_bytes
+#define COMPUTE_BYTES_NAME ss_jacobi2d_5pt_baseline_bytes
 #endif
 
 double COMPUTE_FLOP_NAME(int m0, int n0) {
